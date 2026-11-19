@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600&display=swap");
+
 /* Segev — layout and type modelled on olafureliasson.net/artworks:
    quiet white page, 13px letter-spaced sans, wide three-column grid,
    images bottom-aligned per row, fixed centered "current group" label,
@@ -239,10 +241,9 @@ nav.panel li a:hover, nav.panel li a.active { text-decoration: underline; text-u
   .grid .media img { filter: none; transform: none; opacity: 1; }
 }
 
-/* Home page: Cormorant for the artist's name and headings (body text stays Figtree) */
-body.home header.site .name,
-body.home #lightbox .bar .name,
-body.home h1, body.home h2, body.home h3,
-body.home h4, body.home h5, body.home h6 {
+/* Cormorant for the artist's name and headings on every page (body text stays Figtree) */
+header.site .name,
+#lightbox .bar .name,
+h1, h2, h3, h4, h5, h6 {
   font-family: "Cormorant", Georgia, "Times New Roman", serif;
 }
