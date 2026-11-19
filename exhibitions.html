@@ -4,27 +4,36 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Exhibitions - Segev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Figtree:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <header class="site">
 <a class="name" href="index.html">Segev</a>
-<nav class="main">
-<a href="index.html">Home</a>
-<a href="works.html">Works</a>
-<a href="about.html">About</a>
-<a href="exhibitions.html" class="active">Exhibitions</a>
-<a href="contact.html">Contact</a>
-</nav>
+<span class="count"></span>
+<div class="right"><span>Exhibitions</span><span class="dot" aria-hidden="true">&#9679;</span><button data-menu-toggle aria-controls="menu" aria-expanded="false">Menu</button></div>
 </header>
+<div class="page">
 <main>
-<div class="prose">
-<p>Upcoming exhibitions and events will be announced here.</p>
-<p>For past shows and current availability, please get in touch via <a href="contact.html">Contact</a>.</p>
-</div>
+<div class="prose"><p class="label">Exhibitions</p><p>Upcoming exhibitions and events will be announced here.</p><p>For past shows and current availability, please get in touch via <a href="contact.html">Contact</a>.</p></div>
 </main>
-<div id="lightbox"><button class="close" aria-label="Close">&times;</button><img alt=""><div class="cap"></div></div>
-<footer class="site">&copy; 2026 Segev &middot; <a href="https://instagram.com/segev_770">@segev_770</a></footer>
-<script src="assets/js/lightbox.js"></script>
+<footer class="site"><span>&copy; 2026 Segev</span><a href="https://instagram.com/segev_770">@segev_770</a></footer>
+</div>
+<nav class="panel" id="menu" aria-label="Site">
+<button class="close" data-menu-toggle aria-controls="menu">Close</button>
+<h3>Work</h3>
+<ul><li><a href="index.html">Selected works</a></li><li><a href="works.html">All works</a></li><li><a href="exhibitions.html" class="active">Exhibitions</a></li></ul>
+<h3>Series</h3>
+<ul><li><a href="works.html#sculpture">Sculpture</a></li><li><a href="works.html#masks-and-heads">Masks and Heads</a></li><li><a href="works.html#fish-and-animals">Fish and Animals</a></li><li><a href="works.html#wall-pieces">Wall Pieces</a></li><li><a href="works.html#furniture">Furniture</a></li><li><a href="works.html#paintings">Paintings</a></li></ul>
+<h3>About</h3>
+<ul><li><a href="about.html">Segev</a></li><li><a href="contact.html">Contact</a></li></ul>
+<h3>Elsewhere</h3>
+<ul><li><a href="https://instagram.com/segev_770">Instagram</a></li></ul>
+</nav>
+<div class="veil" aria-hidden="true"></div>
+
+<script src="assets/js/site.js"></script>
 </body>
 </html>
