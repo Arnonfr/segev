@@ -1,0 +1,242 @@
+/* Segev — layout and type modelled on olafureliasson.net/artworks:
+   quiet white page, 13px letter-spaced sans, wide three-column grid,
+   images bottom-aligned per row, fixed centered "current group" label,
+   dark off-canvas menu over a lavender-pink veil. */
+
+:root {
+  --ink: #000;
+  --faint: rgba(0, 0, 0, 0.18);
+  --soft: rgba(0, 0, 0, 0.45);
+  --paper: #fff;
+  --panel: #2f2f2f;
+  --panel-ink: #fff;
+  --panel-faint: rgba(255, 255, 255, 0.4);
+  --card-top: 70px;
+  --card-bottom: 140px;
+  --card-side: 25px;
+  --veil: linear-gradient(90deg, rgba(150, 120, 230, 0.55), rgba(240, 160, 190, 0.55));
+  --edge: 30px;
+  --gap: 90px;
+  --panel-w: 300px;
+  --sans: "Figtree", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: "Cormorant", Georgia, "Times New Roman", serif;
+  --ease: 350ms ease-in-out;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  color: var(--ink);
+  background: var(--paper);
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { font: inherit; letter-spacing: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* Page wrapper slides left when the menu opens */
+.page { transition: transform var(--ease); min-height: 100vh; display: flex; flex-direction: column; }
+body.menu-open .page { transform: translateX(calc(-1 * var(--panel-w))); }
+
+/* ---------- Header ---------- */
+header.site {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline;
+  padding: 26px var(--edge);
+  transition: transform var(--ease);
+  pointer-events: none;
+}
+header.site > * { pointer-events: auto; }
+body.menu-open header.site { transform: translateX(calc(-1 * var(--panel-w))); }
+header.site .name {
+  font-family: var(--serif); font-size: 22px; font-weight: 500;
+  letter-spacing: 0; line-height: 1; justify-self: start;
+}
+header.site .count { color: var(--faint); justify-self: center; }
+header.site .right { justify-self: end; display: flex; gap: 0.5em; align-items: baseline; }
+header.site .right .dot { font-size: 9px; transform: translateY(-1px); }
+header.site .right button:hover,
+header.site .right a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+main { flex: 1; padding: 120px var(--edge) 0; }
+
+/* ---------- Intro line (home) ---------- */
+.intro {
+  max-width: 31em; margin: 0 auto 120px; text-align: center; color: var(--soft);
+}
+
+/* ---------- Artwork grid ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--gap);
+  row-gap: 140px;
+}
+.grid figure { position: relative; cursor: pointer; }
+.grid figure:focus-visible { outline: none; }
+
+/* Every work sits in the same square frame (cropped to fill) */
+.grid .media { position: relative; }
+.grid .frame { position: relative; z-index: 2; aspect-ratio: 1 / 1; overflow: hidden; background: #f6f6f6; }
+.grid .frame img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: blur(18px); transform: scale(1.04); opacity: 0.6;
+  transition: filter 700ms ease, transform 700ms ease, opacity 700ms ease;
+}
+.grid .frame img.loaded { filter: none; transform: none; opacity: 1; }
+
+/* Hover card (after refikanadol.com/works): a coloured panel opens around the
+   image — series and number above, a large title and material below — while
+   the rest of the grid darkens. */
+.grid .card {
+  position: absolute; z-index: 1;
+  top: calc(-1 * var(--card-top)); bottom: calc(-1 * var(--card-bottom));
+  left: calc(-1 * var(--card-side)); right: calc(-1 * var(--card-side));
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 0 var(--card-side) var(--card-side);
+  background: var(--card); color: #fff;
+  opacity: 0; pointer-events: none;
+  transition: opacity 500ms ease;
+}
+.grid .card-top {
+  height: var(--card-top); display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 1em; padding-bottom: 12px; font-size: 14px; letter-spacing: 0.3px;
+}
+.grid .card-bottom {
+  height: calc(var(--card-bottom) - var(--card-side));
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 1em;
+  padding-top: 18px; font-size: 13px; letter-spacing: 0.3px; text-align: right;
+}
+.grid .card-title { font-size: 32px; font-weight: 300; line-height: 1; letter-spacing: 0; text-align: left; }
+.grid figure:hover,
+.grid figure:focus-visible { z-index: 5; }
+.grid figure:hover .card,
+.grid figure:focus-visible .card { opacity: 1; }
+.grid .frame img.loaded { transition: filter 300ms ease 400ms, transform 700ms ease, opacity 700ms ease; }
+.grid:has(figure:hover, figure:focus-visible) figure:not(:hover, :focus-visible) .frame img.loaded {
+  filter: brightness(0.6) blur(1px) contrast(1.3);
+}
+.grid:has(figure:hover, figure:focus-visible) figure:not(:hover, :focus-visible) figcaption { opacity: 0.35; }
+
+.grid figcaption { padding-top: 16px; transition: opacity 300ms ease 400ms; }
+.grid figcaption .meta { display: block; color: var(--faint); }
+
+/* Centered, fixed label naming the series in view (the reference's year marker) */
+.term {
+  position: fixed; top: 50%; left: 50%; z-index: 15;
+  transform: translate(-50%, -50%);
+  transition: transform var(--ease), opacity 250ms linear;
+}
+body.menu-open .term { transform: translate(calc(-50% - var(--panel-w)), -50%); }
+body:has(.grid figure:hover) .term:not(.open) { opacity: 0; pointer-events: none; }
+.term > button {
+  display: block; min-width: 260px; padding: 10px 14px;
+  border: 1px solid transparent; letter-spacing: 3px; text-align: center;
+  transition: border-color 250ms linear, background 250ms linear;
+}
+.term > button:hover,
+.term.open > button { border-color: var(--ink); background: var(--paper); }
+.term ul {
+  list-style: none; display: none;
+  border: 1px solid var(--ink); border-top: 0; background: var(--paper);
+}
+.term.open ul { display: block; }
+.term li a {
+  display: flex; justify-content: space-between; gap: 1em;
+  padding: 8px 14px; color: var(--soft);
+}
+.term li a:hover, .term li a.current { color: var(--ink); }
+.term li a span { color: var(--faint); }
+
+/* ---------- Prose pages ---------- */
+.prose { max-width: 34em; margin: 60px auto 0; font-size: 15px; line-height: 1.65; letter-spacing: 0.4px; }
+.prose p + p { margin-top: 1.1em; }
+.prose a { border-bottom: 1px solid var(--faint); transition: border-color var(--ease); }
+.prose a:hover { border-color: var(--ink); }
+.prose .label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--soft); margin-bottom: 1.6em; }
+
+/* ---------- Footer ---------- */
+footer.site {
+  display: flex; justify-content: space-between; gap: 1em; flex-wrap: wrap;
+  padding: 160px var(--edge) 30px; color: var(--faint);
+}
+footer.site a:hover { color: var(--ink); }
+
+/* ---------- Off-canvas menu ---------- */
+.veil {
+  position: fixed; inset: 0; z-index: 30;
+  background: var(--veil); mix-blend-mode: multiply;
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--ease), visibility var(--ease);
+}
+body.menu-open .veil { opacity: 1; visibility: visible; }
+nav.panel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 40;
+  width: var(--panel-w); padding: 26px 24px 40px;
+  background: var(--panel); color: var(--panel-ink);
+  overflow-y: auto;
+  transform: translateX(100%); visibility: hidden;
+  transition: transform var(--ease), visibility var(--ease);
+}
+body.menu-open nav.panel { transform: none; visibility: visible; }
+nav.panel .close { display: block; margin: 0 0 40px auto; color: var(--panel-faint); }
+nav.panel .close:hover { color: var(--panel-ink); }
+h1, h2, h3, h4, h5, h6 { font-family: var(--serif); }
+nav.panel h3 {
+  font-family: var(--serif);
+  font-size: 9px; font-weight: 400; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--panel-faint); margin: 0 0 8px;
+}
+nav.panel ul { list-style: none; margin-bottom: 30px; }
+nav.panel li a { display: inline-block; padding: 2px 0; }
+nav.panel li a:hover, nav.panel li a.active { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Lightbox ---------- */
+#lightbox {
+  position: fixed; inset: 0; z-index: 50; background: var(--paper);
+  display: grid; grid-template-rows: auto 1fr auto; padding: 26px var(--edge) 30px;
+  opacity: 0; visibility: hidden; transition: opacity 250ms linear, visibility 250ms linear;
+}
+#lightbox.open { opacity: 1; visibility: visible; }
+#lightbox .bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline; }
+#lightbox .bar .name { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: 0; line-height: 1; }
+#lightbox .bar .pos { color: var(--faint); }
+#lightbox .bar .close { justify-self: end; }
+#lightbox .bar .close:hover { text-decoration: underline; text-underline-offset: 3px; }
+#lightbox .stage { position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; padding: 30px 0; }
+#lightbox .stage img { max-width: min(100%, 1080px); max-height: 100%; object-fit: contain; }
+#lightbox .prev, #lightbox .next { position: absolute; top: 0; bottom: 0; width: 50%; }
+#lightbox .prev { left: 0; cursor: w-resize; }
+#lightbox .next { right: 0; cursor: e-resize; }
+#lightbox .cap { text-align: center; }
+#lightbox .cap .meta { color: var(--soft); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) { :root { --gap: 50px; } }
+@media (max-width: 900px) {
+  :root { --gap: 30px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 90px; }
+}
+@media (max-width: 560px) {
+  :root { --edge: 16px; --panel-w: 82vw; }
+  header.site { padding: 20px var(--edge); grid-template-columns: auto 1fr auto; }
+  header.site .count { display: none; }
+  main { padding-top: 90px; }
+  .intro { margin-bottom: 70px; text-align: left; }
+  .grid { grid-template-columns: minmax(0, 1fr); row-gap: 70px; }
+  .grid .card { display: none; }
+  .term { top: auto; bottom: 16px; transform: translateX(-50%); }
+  body.menu-open .term { transform: translateX(calc(-50% - var(--panel-w))); }
+  .term > button { min-width: 0; background: var(--paper); border-color: var(--faint); }
+  .term ul { position: absolute; bottom: 100%; left: 0; right: 0; border-top: 1px solid var(--ink); border-bottom: 0; }
+  footer.site { padding-top: 100px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+  .grid .media img { filter: none; transform: none; opacity: 1; }
+}
